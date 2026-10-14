@@ -24,62 +24,62 @@ const LAYER_CATEGORIES: LayerCategory[] = [
     title: 'Movimiento',
     icon: '🛰️',
     layers: [
-      { id: 'satellites', icon: '🛰️', name: 'Satélites', desc: 'CelesTrak', source: 'Rastreo orbital', active: false },
-      { id: 'flights', icon: '✈️', name: 'Vuelos en Vivo', desc: 'OpenSky Network', source: 'ADS-B', active: false },
-      { id: 'military', icon: '🎖️', name: 'Vuelos Militares', desc: 'Aeronaves militares', source: 'MLAT', active: false },
-      { id: 'adsb', icon: '📡', name: 'ADS-B Local', desc: 'RTL-SDR · WebUSB', source: 'Receptor local', active: false },
-      { id: 'vessels', icon: '◭', name: 'Embarcaciones', desc: 'MarineTraffic', source: 'AIS', active: false },
-      { id: 'traffic', icon: '🚗', name: 'Tráfico Urbano', desc: 'OpenStreetMap / TomTom', source: 'Sensores', active: false },
-      { id: 'transit', icon: '🚌', name: 'Transporte Público', desc: 'GTFS-RT', source: 'Operadores', active: false },
-      { id: 'bikes', icon: '🚲', name: 'Bicicletas', desc: 'GBFS', source: 'Estaciones', active: false },
+      { id: 'satellites', icon: '🛰️', name: 'Satélites', desc: 'CelesTrak', source: 'Rastreo orbital', active: true },
+      { id: 'flights', icon: '✈️', name: 'Vuelos en Vivo', desc: 'OpenSky Network', source: 'ADS-B', active: true },
+      { id: 'military', icon: '🎖️', name: 'Vuelos Militares', desc: 'Aeronaves militares', source: 'MLAT', active: true },
+      { id: 'adsb', icon: '📡', name: 'ADS-B Local', desc: 'RTL-SDR · WebUSB', source: 'Receptor local', active: true },
+      { id: 'vessels', icon: '◭', name: 'Embarcaciones', desc: 'MarineTraffic', source: 'AIS', active: true },
+      { id: 'traffic', icon: '🚗', name: 'Tráfico Urbano', desc: 'OpenStreetMap / TomTom', source: 'Sensores', active: true },
+      { id: 'transit', icon: '🚌', name: 'Transporte Público', desc: 'GTFS-RT', source: 'Operadores', active: true },
+      { id: 'bikes', icon: '🚲', name: 'Bicicletas', desc: 'GBFS', source: 'Estaciones', active: true },
     ]
   },
   {
     title: 'Cámaras',
     icon: '📹',
     layers: [
-      { id: 'cameras', icon: '📹', name: 'Cámaras CCTV', desc: 'CCTV + Street View', source: 'Mapeo comunitario', active: false },
-      { id: 'imagery', icon: '🛰️', name: 'Imágenes Recientes', desc: 'NASA GIBS · HLS + VIIRS', source: 'Satélite', active: false },
+      { id: 'cameras', icon: '📹', name: 'Cámaras CCTV', desc: 'CCTV + Street View', source: 'Mapeo comunitario', active: true },
+      { id: 'imagery', icon: '🛰️', name: 'Imágenes Recientes', desc: 'NASA GIBS · HLS + VIIRS', source: 'Satélite', active: true },
     ]
   },
   {
     title: 'Infraestructura',
     icon: '📷',
     layers: [
-      { id: 'alpr', icon: '📷', name: 'Cámaras ALPR', desc: 'OpenStreetMap', source: 'Mapeo comunitario', active: false },
-      { id: 'installations', icon: '⌖', name: 'Instalaciones', desc: 'OSM + Google Places', source: 'Puntos de interés', active: false },
-      { id: 'datacenters', icon: '▣', name: 'Centros de Datos', desc: 'Base de datos local', source: 'Infraestructura', active: false },
-      { id: 'cables', icon: '≋', name: 'Cables Submarinos', desc: 'TeleGeography', source: 'Red global', active: false },
-      { id: 'dams', icon: '▰', name: 'Presas', desc: 'USACE', source: 'Infraestructura hídrica', active: false },
+      { id: 'alpr', icon: '📷', name: 'Cámaras ALPR', desc: 'OpenStreetMap', source: 'Mapeo comunitario', active: true },
+      { id: 'installations', icon: '⌖', name: 'Instalaciones', desc: 'OSM + Google Places', source: 'Puntos de interés', active: true },
+      { id: 'datacenters', icon: '▣', name: 'Centros de Datos', desc: 'Base de datos local', source: 'Infraestructura', active: true },
+      { id: 'cables', icon: '≋', name: 'Cables Submarinos', desc: 'TeleGeography', source: 'Red global', active: true },
+      { id: 'dams', icon: '▰', name: 'Presas', desc: 'USACE', source: 'Infraestructura hídrica', active: true },
     ]
   },
   {
     title: 'Eventos',
     icon: '🚀',
     layers: [
-      { id: 'space', icon: '🚀', name: 'Misiones Espaciales', desc: 'Launch Library 2', source: '30 días', active: false },
-      { id: 'earthquakes', icon: '🌋', name: 'Terremotos', desc: 'USGS', source: '24 horas', active: false },
-      { id: 'fires', icon: '▲', name: 'Incendios Activos', desc: 'NASA FIRMS', source: 'EN VIVO', active: false },
-      { id: 'firePerim', icon: '🔥', name: 'Perímetros de Fuego', desc: 'NIFC WFIGS', source: 'Agencias', active: false },
+      { id: 'space', icon: '🚀', name: 'Misiones Espaciales', desc: 'Launch Library 2', source: '30 días', active: true },
+      { id: 'earthquakes', icon: '🌋', name: 'Terremotos', desc: 'USGS', source: '24 horas', active: true },
+      { id: 'fires', icon: '▲', name: 'Incendios Activos', desc: 'NASA FIRMS', source: 'EN VIVO', active: true },
+      { id: 'firePerim', icon: '🔥', name: 'Perímetros de Fuego', desc: 'NIFC WFIGS', source: 'Agencias', active: true },
     ]
   },
   {
     title: 'Clima',
     icon: '🌬',
     layers: [
-      { id: 'wind', icon: '🌬', name: 'Viento', desc: 'GFS / ECMWF IFS', source: 'Pronóstico', active: false },
-      { id: 'rain', icon: '◉', name: 'Radar de Lluvia', desc: 'NOAA nowCOAST', source: 'Observado', active: false },
-      { id: 'clouds', icon: '☁', name: 'Nubes Satélite', desc: 'NOAA nowCOAST', source: 'Observado', active: false },
-      { id: 'lightning', icon: 'ϟ', name: 'Densidad Rayos', desc: 'NOAA nowCOAST', source: 'Observado', active: false },
-      { id: 'cyclones', icon: '◉', name: 'Ciclones', desc: 'NOAA NHC / CPHC', source: 'Avisos', active: false },
+      { id: 'wind', icon: '🌬', name: 'Viento', desc: 'GFS / ECMWF IFS', source: 'Pronóstico', active: true },
+      { id: 'rain', icon: '◉', name: 'Radar de Lluvia', desc: 'NOAA nowCOAST', source: 'Observado', active: true },
+      { id: 'clouds', icon: '☁', name: 'Nubes Satélite', desc: 'NOAA nowCOAST', source: 'Observado', active: true },
+      { id: 'lightning', icon: 'ϟ', name: 'Densidad Rayos', desc: 'NOAA nowCOAST', source: 'Observado', active: true },
+      { id: 'cyclones', icon: '◉', name: 'Ciclones', desc: 'NOAA NHC / CPHC', source: 'Avisos', active: true },
     ]
   },
   {
     title: 'Utilidades',
     icon: '🧭',
     layers: [
-      { id: 'directions', icon: '🧭', name: 'Direcciones', desc: 'OSM Routing', source: 'Rutas', active: false },
-      { id: 'radio', icon: '◉', name: 'Radio', desc: 'Radio Browser', source: 'Emisoras', active: false },
+      { id: 'directions', icon: '🧭', name: 'Direcciones', desc: 'OSM Routing', source: 'Rutas', active: true },
+      { id: 'radio', icon: '◉', name: 'Radio', desc: 'Radio Browser', source: 'Emisoras', active: true },
     ]
   },
 ]
@@ -131,9 +131,13 @@ export default function App() {
   const [cityPanelOpen, setCityPanelOpen] = useState(false)
   const [agentActive, setAgentActive] = useState(false)
   const [cleanView, setCleanView] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
+  const [searchResults, setSearchResults] = useState<{name: string, lat: number, lng: number, type: string}[]>([])
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<L.Map | null>(null)
   const markerRef = useRef<L.CircleMarker | null>(null)
+  const searchRef = useRef<HTMLInputElement>(null)
 
   // Clock
   useEffect(() => {
@@ -158,6 +162,69 @@ export default function App() {
     const id = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(id)
   }, [])
+
+  // Keyboard shortcut for search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === '/' && document.activeElement !== searchRef.current) {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+      if (e.key === 'Escape') {
+        setSearchFocused(false)
+        searchRef.current?.blur()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  // Search logic
+  useEffect(() => {
+    if (searchQuery.trim().length === 0) {
+      setSearchResults([])
+      return
+    }
+    const query = searchQuery.toLowerCase()
+    const allPlaces = [
+      ...CITIES.map(c => ({ ...c, type: 'Ciudad' })),
+      { name: 'Parque Nacional de Monfragüe', lat: 39.8333, lng: -6.0833, type: 'Parque Nacional' },
+      { name: 'Monasterio de Guadalupe', lat: 39.4494, lng: -5.3211, type: 'Monumento' },
+      { name: 'Ciudad Romana de Mérida', lat: 38.9186, lng: -6.3269, type: 'Patrimonio UNESCO' },
+      { name: 'Cáceres Casco Antiguo', lat: 39.4766, lng: -6.3723, type: 'Patrimonio UNESCO' },
+      { name: 'Embalse de Alcántara', lat: 39.7222, lng: -6.8861, type: 'Infraestructura' },
+      { name: 'Sierra de Gata', lat: 40.2500, lng: -6.5833, type: 'Comarca' },
+      { name: 'La Vera', lat: 40.1333, lng: -5.6167, type: 'Comarca' },
+      { name: 'Trujillo', lat: 39.4536, lng: -5.8839, type: 'Ciudad' },
+      { name: 'Zafra', lat: 38.4236, lng: -6.4167, type: 'Ciudad' },
+      { name: 'Don Benito', lat: 38.9500, lng: -5.6833, type: 'Ciudad' },
+      { name: 'Villanueva de la Serena', lat: 39.0167, lng: -5.7833, type: 'Ciudad' },
+      { name: 'Almendralejo', lat: 38.6833, lng: -6.6667, type: 'Ciudad' },
+      { name: 'Navalmoral de la Mata', lat: 39.9000, lng: -5.5500, type: 'Ciudad' },
+      { name: 'Aeródromo de Talavera', lat: 39.9667, lng: -4.8500, type: 'Aeródromo' },
+      { name: 'Aeropuerto de Badajoz', lat: 38.8914, lng: -6.8211, type: 'Aeropuerto' },
+      { name: 'Base Aérea de Talavera', lat: 39.9500, lng: -4.8500, type: 'Base Militar' },
+      { name: 'Central Nuclear Almaraz', lat: 39.8108, lng: -6.2097, type: 'Central Nuclear' },
+      { name: 'Presa de Valdecañas', lat: 39.8333, lng: -5.8833, type: 'Presa' },
+      { name: 'Río Tajo', lat: 39.5000, lng: -5.8000, type: 'Río' },
+      { name: 'Río Guadiana', lat: 38.5000, lng: -6.5000, type: 'Río' },
+    ]
+    const results = allPlaces.filter(p => p.name.toLowerCase().includes(query))
+    setSearchResults(results.slice(0, 8))
+  }, [searchQuery])
+
+  const handleSearchSelect = (place: {name: string, lat: number, lng: number, type: string}) => {
+    setLocation({ lat: place.lat, lng: place.lng })
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo([place.lat, place.lng], 12, { duration: 2 })
+      if (markerRef.current) {
+        markerRef.current.setLatLng([place.lat, place.lng])
+      }
+    }
+    setSearchQuery(place.name)
+    setSearchFocused(false)
+    setSearchResults([])
+  }
 
   // Initialize map
   useEffect(() => {
@@ -360,6 +427,87 @@ export default function App() {
         {/* ─── Map Area ────────────────────────────────────────────── */}
         <div className="map-area">
           <div ref={mapRef} className="map-container" />
+
+          {/* ─── Search Bar Destacada ─────────────────────────────────── */}
+          <div className="search-container">
+            <div className={`search-bar ${searchFocused ? 'focused' : ''}`}>
+              <div className="search-icon-wrapper">
+                <i className="fa-solid fa-magnifying-glass" />
+              </div>
+              <input
+                ref={searchRef}
+                type="text"
+                className="search-input"
+                placeholder="BUSCAR UBICACIÓN · CIUDAD · PUNTO DE INTERÉS..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
+              />
+              {searchQuery && (
+                <button className="search-clear" onClick={() => { setSearchQuery(''); searchRef.current?.focus() }}>
+                  <i className="fa-solid fa-xmark" />
+                </button>
+              )}
+              <div className="search-shortcut">
+                <kbd>/</kbd>
+              </div>
+            </div>
+
+            {/* Search Results Dropdown */}
+            {searchFocused && searchResults.length > 0 && (
+              <div className="search-results">
+                <div className="search-results-header">
+                  <span>RESULTADOS</span>
+                  <span className="search-results-count">{searchResults.length} encontrados</span>
+                </div>
+                {searchResults.map((result, i) => (
+                  <button
+                    key={i}
+                    className="search-result-item"
+                    onMouseDown={() => handleSearchSelect(result)}
+                  >
+                    <span className="result-icon">
+                      {result.type === 'Ciudad' ? '🏙️' :
+                       result.type === 'Aeropuerto' ? '✈️' :
+                       result.type === 'Base Militar' ? '🎖️' :
+                       result.type === 'Central Nuclear' ? '☢️' :
+                       result.type === 'Presa' ? '▰' :
+                       result.type === 'Río' ? '🌊' :
+                       result.type === 'Parque Nacional' ? '🌳' :
+                       result.type === 'Monumento' || result.type === 'Patrimonio UNESCO' ? '🏛️' :
+                       '📍'}
+                    </span>
+                    <div className="result-info">
+                      <span className="result-name">{result.name}</span>
+                      <span className="result-type">{result.type} · {result.lat.toFixed(4)}°N, {Math.abs(result.lng).toFixed(4)}°W</span>
+                    </div>
+                    <span className="result-arrow">→</span>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Quick search suggestions */}
+            {searchFocused && searchResults.length === 0 && searchQuery.length === 0 && (
+              <div className="search-results">
+                <div className="search-results-header">
+                  <span>BÚSQUEDA RÁPIDA</span>
+                </div>
+                <div className="search-suggestions">
+                  {['Mérida', 'Badajoz', 'Cáceres', 'Monfragüe', 'Almaraz', 'Trujillo', 'Guadalupe'].map(s => (
+                    <button
+                      key={s}
+                      className="search-suggestion-chip"
+                      onMouseDown={() => setSearchQuery(s)}
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Map overlay HUD */}
           <div className="map-hud-top">
