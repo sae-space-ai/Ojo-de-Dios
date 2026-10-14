@@ -134,6 +134,19 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchResults, setSearchResults] = useState<{name: string, lat: number, lng: number, type: string}[]>([])
+  const [apiPanelOpen, setApiPanelOpen] = useState(false)
+  const [apiKeys, setApiKeys] = useState({
+    openSky: '',
+    marineTraffic: '',
+    nasa: '',
+    noaa: '',
+    googleMaps: '',
+    bingMaps: '',
+    openWeather: '',
+    flightAware: '',
+  })
+  const [showKeys, setShowKeys] = useState<Record<string, boolean>>({})
+  const [welcomeShown, setWelcomeShown] = useState(false)
   const mapRef = useRef<HTMLDivElement>(null)
   const mapInstanceRef = useRef<L.Map | null>(null)
   const markerRef = useRef<L.CircleMarker | null>(null)
@@ -291,6 +304,17 @@ export default function App() {
   }, [])
 
   const toggleLayer = useCallback((categoryId: number, layerId: string) => {
+    // Check if layer needs API key
+    const layerNeedsApi = ['flights', 'military', 'adsb', 'vessels', 'satellites', 'imagery', 'fires', 'firePerim', 'earthquakes', 'space', 'wind', 'rain', 'clouds', 'lightning', 'cyclones']
+    
+    if (layerNeedsApi.includes(layerId)) {
+      const hasAnyApiKey = Object.values(apiKeys).some(k => k)
+      if (!hasAnyApiKey) {
+        setApiPanelOpen(true)
+        return
+      }
+    }
+    
     setLayers(prev => prev.map((cat, i) => {
       if (i !== categoryId) return cat
       return {
@@ -298,7 +322,7 @@ export default function App() {
         layers: cat.layers.map(l => l.id === layerId ? { ...l, active: !l.active } : l)
       }
     }))
-  }, [])
+  }, [apiKeys])
 
   const activeLayerCount = layers.reduce((acc, cat) => acc + cat.layers.filter(l => l.active).length, 0)
 
@@ -373,6 +397,9 @@ export default function App() {
           <div className="clock-display">
             <span className="clock-time">{formatTime(clock)}</span>
           </div>
+          <button className="top-btn" onClick={() => setApiPanelOpen(true)} title="Configuración API">
+            <i className="fa-solid fa-key" />
+          </button>
           <button className="top-btn" onClick={() => setCleanView(true)} title="Vista limpia">
             <i className="fa-solid fa-eye" />
           </button>
@@ -388,7 +415,13 @@ export default function App() {
         <aside className={`left-panel ${sidebarOpen ? 'open' : 'closed'}`}>
           <div className="panel-header">
             <h2><i className="fa-solid fa-layer-group" /> CAPAS DE DATOS</h2>
-            <span className="layer-count">{activeLayerCount} activas</span>
+            <div className="panel-header-actions">
+              <button className="api-status-btn" onClick={() => setApiPanelOpen(true)} title="Configurar APIs">
+                <i className="fa-solid fa-key" />
+                <span className="api-status-count">{Object.values(apiKeys).filter(k => k).length}/8</span>
+              </button>
+              <span className="layer-count">{activeLayerCount} activas</span>
+            </div>
           </div>
 
           <div className="panel-scroll">
@@ -402,22 +435,31 @@ export default function App() {
                   </span>
                 </div>
                 <div className="category-layers">
-                  {category.layers.map(layer => (
-                    <button
-                      key={layer.id}
-                      className={`layer-item ${layer.active ? 'active' : ''}`}
-                      onClick={() => toggleLayer(ci, layer.id)}
-                    >
-                      <span className="layer-icon">{layer.icon}</span>
-                      <div className="layer-info">
-                        <span className="layer-name">{layer.name}</span>
-                        <span className="layer-desc">{layer.desc}</span>
-                      </div>
-                      <div className={`layer-toggle ${layer.active ? 'on' : 'off'}`}>
-                        <div className="toggle-knob" />
-                      </div>
-                    </button>
-                  ))}
+                  {category.layers.map(layer => {
+                    const needsApi = ['flights', 'military', 'adsb', 'vessels', 'satellites', 'imagery', 'fires', 'firePerim', 'earthquakes', 'space', 'wind', 'rain', 'clouds', 'lightning', 'cyclones'].includes(layer.id)
+                    const hasApiKey = Object.values(apiKeys).some(k => k)
+                    
+                    return (
+                      <button
+                        key={layer.id}
+                        className={`layer-item ${layer.active ? 'active' : ''} ${needsApi && !hasApiKey ? 'needs-api' : ''}`}
+                        onClick={() => toggleLayer(ci, layer.id)}
+                        title={needsApi && !hasApiKey ? 'Requiere configuración de API' : ''}
+                      >
+                        <span className="layer-icon">{layer.icon}</span>
+                        <div className="layer-info">
+                          <span className="layer-name">
+                            {layer.name}
+                            {needsApi && !hasApiKey && <i className="fa-solid fa-key layer-api-icon" />}
+                          </span>
+                          <span className="layer-desc">{layer.desc}</span>
+                        </div>
+                        <div className={`layer-toggle ${layer.active ? 'on' : 'off'}`}>
+                          <div className="toggle-knob" />
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
             ))}
@@ -773,6 +815,250 @@ export default function App() {
           </div>
         </aside>
       </div>
+
+      {/* ─── Welcome Modal ─────────────────────────────────────────────── */}
+      {!welcomeShown && Object.values(apiKeys).every(k => !k) && (
+        <div className="welcome-overlay">
+          <div className="welcome-modal">
+            <div className="welcome-icon">
+              <i className="fa-solid fa-satellite-dish" />
+            </div>
+            <h2 className="welcome-title">OJO DE DIOS</h2>
+            <p className="welcome-subtitle">SISTEMA DE VIGILANCIA GLOBAL · EXTREMADURA</p>
+            <div className="welcome-divider" />
+            <p className="welcome-message">
+              Para activar todas las herramientas de rastreo en tiempo real,
+              es necesario configurar las claves API de los servicios externos.
+            </p>
+            <div className="welcome-features">
+              <div className="welcome-feature">
+                <span>✈️</span>
+                <span>Rastreo aéreo y vuelos militares</span>
+              </div>
+              <div className="welcome-feature">
+                <span>◭</span>
+                <span>Embarcaciones y tráfico marítimo</span>
+              </div>
+              <div className="welcome-feature">
+                <span>🛰️</span>
+                <span>Imágenes satelitales NASA</span>
+              </div>
+              <div className="welcome-feature">
+                <span>🌬️</span>
+                <span>Datos meteorológicos NOAA</span>
+              </div>
+              <div className="welcome-feature">
+                <span>🔥</span>
+                <span>Incendios y eventos sísmicos</span>
+              </div>
+            </div>
+            <div className="welcome-actions">
+              <button className="welcome-btn-primary" onClick={() => { setApiPanelOpen(true); setWelcomeShown(true) }}>
+                <i className="fa-solid fa-key" />
+                CONFIGURAR APIs
+              </button>
+              <button className="welcome-btn-secondary" onClick={() => setWelcomeShown(true)}>
+                MODO DEMO
+              </button>
+            </div>
+            <p className="welcome-note">
+              Las APIs son gratuitas en sus niveles básicos. Consulta la documentación de cada servicio.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ─── API Keys Panel ──────────────────────────────────────────── */}
+      {apiPanelOpen && (
+        <div className="api-panel-overlay" onClick={() => setApiPanelOpen(false)}>
+          <div className="api-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="api-panel-header">
+              <div className="api-panel-title">
+                <i className="fa-solid fa-key" />
+                <h2>CONFIGURACIÓN DE API</h2>
+              </div>
+              <button className="api-panel-close" onClick={() => setApiPanelOpen(false)}>
+                <i className="fa-solid fa-xmark" />
+              </button>
+            </div>
+
+            <div className="api-panel-content">
+              <div className="api-section">
+                <h3 className="api-section-title">
+                  <span className="api-section-icon">✈️</span>
+                  RASTREO AÉREO
+                </h3>
+                <div className="api-input-group">
+                  <label>OpenSky Network</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.openSky ? 'text' : 'password'}
+                      value={apiKeys.openSky}
+                      onChange={(e) => setApiKeys({...apiKeys, openSky: e.target.value})}
+                      placeholder="Ingresa tu API key de OpenSky"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, openSky: !showKeys.openSky})}>
+                      <i className={`fa-solid fa-${showKeys.openSky ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Vuelos en vivo, ADS-B global</span>
+                </div>
+                <div className="api-input-group">
+                  <label>FlightAware</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.flightAware ? 'text' : 'password'}
+                      value={apiKeys.flightAware}
+                      onChange={(e) => setApiKeys({...apiKeys, flightAware: e.target.value})}
+                      placeholder="Ingresa tu API key de FlightAware"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, flightAware: !showKeys.flightAware})}>
+                      <i className={`fa-solid fa-${showKeys.flightAware ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Datos de vuelos comerciales</span>
+                </div>
+              </div>
+
+              <div className="api-section">
+                <h3 className="api-section-title">
+                  <span className="api-section-icon">◭</span>
+                  RASTREO MARÍTIMO
+                </h3>
+                <div className="api-input-group">
+                  <label>MarineTraffic</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.marineTraffic ? 'text' : 'password'}
+                      value={apiKeys.marineTraffic}
+                      onChange={(e) => setApiKeys({...apiKeys, marineTraffic: e.target.value})}
+                      placeholder="Ingresa tu API key de MarineTraffic"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, marineTraffic: !showKeys.marineTraffic})}>
+                      <i className={`fa-solid fa-${showKeys.marineTraffic ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Embarcaciones y tráfico portuario</span>
+                </div>
+              </div>
+
+              <div className="api-section">
+                <h3 className="api-section-title">
+                  <span className="api-section-icon">🛰️</span>
+                  DATOS ESPACIALES
+                </h3>
+                <div className="api-input-group">
+                  <label>NASA Earthdata</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.nasa ? 'text' : 'password'}
+                      value={apiKeys.nasa}
+                      onChange={(e) => setApiKeys({...apiKeys, nasa: e.target.value})}
+                      placeholder="Ingresa tu token de NASA Earthdata"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, nasa: !showKeys.nasa})}>
+                      <i className={`fa-solid fa-${showKeys.nasa ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Imágenes satelitales, FIRMS, GIBS</span>
+                </div>
+              </div>
+
+              <div className="api-section">
+                <h3 className="api-section-title">
+                  <span className="api-section-icon">🌬️</span>
+                  DATOS CLIMÁTICOS
+                </h3>
+                <div className="api-input-group">
+                  <label>NOAA</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.noaa ? 'text' : 'password'}
+                      value={apiKeys.noaa}
+                      onChange={(e) => setApiKeys({...apiKeys, noaa: e.target.value})}
+                      placeholder="Ingresa tu API key de NOAA"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, noaa: !showKeys.noaa})}>
+                      <i className={`fa-solid fa-${showKeys.noaa ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Radar meteorológico, ciclones</span>
+                </div>
+                <div className="api-input-group">
+                  <label>OpenWeatherMap</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.openWeather ? 'text' : 'password'}
+                      value={apiKeys.openWeather}
+                      onChange={(e) => setApiKeys({...apiKeys, openWeather: e.target.value})}
+                      placeholder="Ingresa tu API key de OpenWeather"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, openWeather: !showKeys.openWeather})}>
+                      <i className={`fa-solid fa-${showKeys.openWeather ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Pronósticos y datos en tiempo real</span>
+                </div>
+              </div>
+
+              <div className="api-section">
+                <h3 className="api-section-title">
+                  <span className="api-section-icon">🗺️</span>
+                  MAPAS Y UBICACIÓN
+                </h3>
+                <div className="api-input-group">
+                  <label>Google Maps Platform</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.googleMaps ? 'text' : 'password'}
+                      value={apiKeys.googleMaps}
+                      onChange={(e) => setApiKeys({...apiKeys, googleMaps: e.target.value})}
+                      placeholder="Ingresa tu API key de Google Maps"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, googleMaps: !showKeys.googleMaps})}>
+                      <i className={`fa-solid fa-${showKeys.googleMaps ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Google 3D, Street View, Places</span>
+                </div>
+                <div className="api-input-group">
+                  <label>Bing Maps</label>
+                  <div className="api-input-wrapper">
+                    <input
+                      type={showKeys.bingMaps ? 'text' : 'password'}
+                      value={apiKeys.bingMaps}
+                      onChange={(e) => setApiKeys({...apiKeys, bingMaps: e.target.value})}
+                      placeholder="Ingresa tu API key de Bing Maps"
+                    />
+                    <button onClick={() => setShowKeys({...showKeys, bingMaps: !showKeys.bingMaps})}>
+                      <i className={`fa-solid fa-${showKeys.bingMaps ? 'eye-slash' : 'eye'}`} />
+                    </button>
+                  </div>
+                  <span className="api-hint">Imágenes aéreas Bing</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="api-panel-footer">
+              <div className="api-status">
+                <span className="api-status-dot"></span>
+                <span>{Object.values(apiKeys).filter(k => k).length} / 8 APIs configuradas</span>
+              </div>
+              <div className="api-actions">
+                <button className="api-btn-secondary" onClick={() => setApiKeys({
+                  openSky: '', marineTraffic: '', nasa: '', noaa: '',
+                  googleMaps: '', bingMaps: '', openWeather: '', flightAware: ''
+                })}>
+                  LIMPIAR TODO
+                </button>
+                <button className="api-btn-primary" onClick={() => setApiPanelOpen(false)}>
+                  GUARDAR Y CERRAR
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Bottom Bar ────────────────────────────────────────────── */}
       <footer className="bottom-bar">
